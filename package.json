@@ -9,7 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "lit": "^2.7.6"
+    "lit": "^2.7.6",
+    "pixi.js": "^7.3.2"
   },
   "devDependencies": {
     "typescript": "^5.0.2",
