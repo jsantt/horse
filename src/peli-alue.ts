@@ -99,9 +99,11 @@ export class PeliAlue extends LitElement {
             <button @click=${() => this.#aloita()}>aloita</button
             ><img src="./src/assets/horse-logo.jpg" />
           `
-        : html` <main></main>`}
+        : html` <main></main>
+            <button type="button" @click=${() => this.#hyppää()}>
+              hyppää
+            </button>`}
 
-      <button type="button" @click=${() => this.#hyppää()}>hyppää</button>
       <footer>Tekijät: Lotte ja Alisa</footer>
     `;
   }
