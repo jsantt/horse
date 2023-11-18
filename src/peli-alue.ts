@@ -23,10 +23,12 @@ export class PeliAlue extends LitElement {
   @property({ type: Number })
   count = 0;
 
+  @property({ type: Boolean })
   näytäPelialue = false;
-  hyppää = 0;
 
-  firstUpdated() {
+  hyppy: undefined | 'ylös' | 'alas' = undefined;
+
+  aloitaPeli() {
     (async () => {
       // The application will create a renderer using WebGL, if possible,
       // with a fallback to a canvas render. It will also setup the ticker
@@ -57,36 +59,48 @@ export class PeliAlue extends LitElement {
 
       // Listen for frame updates
       app.ticker.add(() => {
-        // each frame we spin the bunny around a bit
-        if (this.hyppää > 24) {
-          //heppa.rotation += 0.1;
-          heppa.anchor.y += 0.01;
-          this.hyppää -= 1;
-        } else if (this.hyppää > 0) {
-          heppa.anchor.y -= 0.01;
-          this.hyppää -= 1;
+        if (this.hyppy === 'ylös') {
+          heppa.anchor.y += 0.02;
+        } else if (this.hyppy === 'alas') {
+          heppa.anchor.y -= 0.02;
+        }
+
+        if (heppa.anchor.y > 0.8) {
+          this.hyppy = 'alas';
+        }
+
+        if (heppa.anchor.y < 0.5) {
+          this.hyppy = undefined;
         }
       });
     })();
   }
   #hyppää() {
-    this.hyppää = 50;
+    if (this.hyppy !== undefined) {
+      return;
+    }
+    this.hyppy = 'ylös';
+  }
+
+  #aloita() {
+    this.näytäPelialue = true;
+    setTimeout(() => {
+      this.aloitaPeli();
+    }, 100);
   }
 
   render() {
     return html`
-      <header>
-        <h1>Tervetuloa horse ten peliin</h1>
-      </header>
-      <main>
-        <button
-          onclick="alert('tervetuloa pelaamaan Horse peliä.tähän tulee mailman paras hevospeli')"
-        >
-          aloita</button
-        ><img src="./src/assets/horse-logo.jpg" />
-      </main>
+      ${!this.näytäPelialue
+        ? html`
+            <header>
+              <h1>Tervetuloa horse ten peliin</h1>
+            </header>
+            <button @click=${() => this.#aloita()}>aloita</button
+            ><img src="./src/assets/horse-logo.jpg" />
+          `
+        : html` <main></main>`}
 
-      <main></main>
       <button type="button" @click=${() => this.#hyppää()}>hyppää</button>
       <footer>Tekijät: Lotte ja Alisa</footer>
     `;
