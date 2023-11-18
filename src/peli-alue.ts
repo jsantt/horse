@@ -23,9 +23,10 @@ export class PeliAlue extends LitElement {
   @property({ type: Number })
   count = 0;
 
-  constructor() {
-    super();
+  näytäPelialue = false;
+  hyppää = 0;
 
+  firstUpdated() {
     (async () => {
       // The application will create a renderer using WebGL, if possible,
       // with a fallback to a canvas render. It will also setup the ticker
@@ -34,39 +35,66 @@ export class PeliAlue extends LitElement {
 
       // The application will create a canvas element for you that you
       // can then insert into the DOM
-      document.body.appendChild(app.view as any);
+      //document.body.appendChild(app.view as any);
+      this.renderRoot.querySelector('main')?.appendChild(app.view as any);
 
       // load the texture we need
       const texture = await Assets.load('src/assets/heppa.jpg');
 
       // This creates a texture from a 'bunny.png' image
-      const bunny = new Sprite(texture);
+      const heppa = new Sprite(texture);
 
       // Setup the position of the bunny
-      bunny.x = app.renderer.width / 2;
-      bunny.y = app.renderer.height / 2;
+      heppa.x = app.renderer.width / 2;
+      heppa.y = app.renderer.height / 2;
 
       // Rotate around the center
-      bunny.anchor.x = 0.5;
-      bunny.anchor.y = 0.5;
+      heppa.anchor.x = 0.5;
+      heppa.anchor.y = 0.5;
 
       // Add the bunny to the scene we are building
-      app.stage.addChild(bunny);
+      app.stage.addChild(heppa);
 
       // Listen for frame updates
       app.ticker.add(() => {
         // each frame we spin the bunny around a bit
-        bunny.rotation += 0.01;
+        if (this.hyppää > 24) {
+          //heppa.rotation += 0.1;
+          heppa.anchor.y += 0.01;
+          this.hyppää -= 1;
+        } else if (this.hyppää > 0) {
+          heppa.anchor.y -= 0.01;
+          this.hyppää -= 1;
+        }
       });
     })();
   }
+  #hyppää() {
+    this.hyppää = 50;
+  }
 
   render() {
-    return html` pelialue `;
+    return html`
+      <header>
+        <h1>Tervetuloa horse ten peliin</h1>
+      </header>
+      <main>
+        <button
+          onclick="alert('tervetuloa pelaamaan Horse peliä.tähän tulee mailman paras hevospeli')"
+        >
+          aloita</button
+        ><img src="./src/assets/horse-logo.jpg" />
+      </main>
+
+      <main></main>
+      <button type="button" @click=${() => this.#hyppää()}>hyppää</button>
+      <footer>Tekijät: Lotte ja Alisa</footer>
+    `;
   }
 
   static styles = css`
-    :host {
+    img {
+      max-width: 100%;
     }
   `;
 }
