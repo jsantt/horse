@@ -41,7 +41,7 @@ export class PeliAlue extends LitElement {
       this.renderRoot.querySelector('main')?.appendChild(app.view as any);
 
       // load the texture we need
-      const texture = await Assets.load('src/assets/heppa.jpg');
+      const texture = await Assets.load('./src/assets/heppa.jpg');
 
       // This creates a texture from a 'bunny.png' image
       const heppa = new Sprite(texture);
@@ -60,9 +60,9 @@ export class PeliAlue extends LitElement {
       // Listen for frame updates
       app.ticker.add(() => {
         if (this.hyppy === 'ylös') {
-          heppa.anchor.y += 0.02;
+          heppa.anchor.y += 0.03 * Math.sqrt(heppa.anchor.y);
         } else if (this.hyppy === 'alas') {
-          heppa.anchor.y -= 0.02;
+          heppa.anchor.y -= 0.03 * Math.sqrt(heppa.anchor.y);
         }
 
         if (heppa.anchor.y > 0.8) {
@@ -99,10 +99,7 @@ export class PeliAlue extends LitElement {
             <button @click=${() => this.#aloita()}>aloita</button
             ><img src="./src/assets/horse-logo.jpg" />
           `
-        : html` <main></main>
-            <button type="button" @click=${() => this.#hyppää()}>
-              hyppää
-            </button>`}
+        : html` <main @click=${() => this.#hyppää()}></main> `}
 
       <footer>Tekijät: Lotte ja Alisa</footer>
     `;
