@@ -1,7 +1,9 @@
 import { LitElement, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-
 import { Application, Assets, Sprite } from 'pixi.js';
+
+import keppariUrl from './assets/keppari.jpg';
+import logoUrl from './assets/horse-logo.jpg';
 
 /**
  * An example element.
@@ -44,7 +46,7 @@ export class PeliAlue extends LitElement {
       this.renderRoot.querySelector('main')?.appendChild(app.view as any);
 
       // load the texture we need
-      const texture = await Assets.load('/src/assets/heppa.jpg');
+      const texture = await Assets.load(keppariUrl);
 
       // This creates a texture from a 'bunny.png' image
       const heppa = new Sprite(texture);
@@ -100,7 +102,7 @@ export class PeliAlue extends LitElement {
               <h1>Tervetuloa horse ten peliin</h1>
             </header>
             <button @click=${() => this.#aloita()}>aloita</button
-            ><img src="src/assets/horse-logo.jpg" />
+            ><img src=${logoUrl} />
             <footer>Tekijät: Lotte ja Alisa</footer>
           `
         : html` <main @click=${() => this.#hyppää()}></main> `}
