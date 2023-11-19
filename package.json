@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite  --open horse",
-    "build": "tsc && vite build --outDir docs --base horse",
+    "build": "tsc && vite build --outDir docs --assetsDir src/assets --base horse",
     "preview": "vite preview"
   },
   "dependencies": {
