@@ -35,6 +35,7 @@ export class PeliAlue extends LitElement {
       // and the root stage PIXI.Container
       const app = new Application({
         backgroundColor: 0xf6f6f6,
+        resizeTo: window,
       });
 
       // The application will create a canvas element for you that you
@@ -43,7 +44,7 @@ export class PeliAlue extends LitElement {
       this.renderRoot.querySelector('main')?.appendChild(app.view as any);
 
       // load the texture we need
-      const texture = await Assets.load('./src/assets/heppa.jpg');
+      const texture = await Assets.load('/src/assets/heppa.jpg');
 
       // This creates a texture from a 'bunny.png' image
       const heppa = new Sprite(texture);
@@ -99,11 +100,10 @@ export class PeliAlue extends LitElement {
               <h1>Tervetuloa horse ten peliin</h1>
             </header>
             <button @click=${() => this.#aloita()}>aloita</button
-            ><img src="./src/assets/horse-logo.jpg" />
+            ><img src="src/assets/horse-logo.jpg" />
+            <footer>Tekijät: Lotte ja Alisa</footer>
           `
         : html` <main @click=${() => this.#hyppää()}></main> `}
-
-      <footer>Tekijät: Lotte ja Alisa</footer>
     `;
   }
 

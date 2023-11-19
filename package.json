@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build --outDir docs",
+    "dev": "vite  --open horse",
+    "build": "tsc && vite build --outDir docs --base horse",
     "preview": "vite preview"
   },
   "dependencies": {
