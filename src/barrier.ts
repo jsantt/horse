@@ -1,7 +1,7 @@
 import { Assets, Sprite } from 'pixi.js';
-import image from './assets/keppari.jpg';
+import image from './assets/barrier.png';
 
-class Horse {
+class Barrier {
   #currentX = 300;
   #currentY = 300;
 
@@ -52,20 +52,15 @@ class Horse {
   }
 
   jump() {
-    this.#forceY = -80;
+    this.#forceY = -50;
   }
 
   update() {
-    // apply force
-    this.y = this.#currentY + this.#forceY * 0.1;
-
-    if (this.#currentY >= this.#ground) {
-      this.#currentY = this.#ground;
-      this.#forceY = 0;
-    } else {
-      this.#forceY = this.#forceY + 2;
+    this.x = this.#currentX + 8;
+    if (this.x > 1000) {
+      this.x = -300;
     }
   }
 }
 
-export { Horse };
+export { Barrier };

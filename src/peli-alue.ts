@@ -1,9 +1,10 @@
 import { LitElement, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { Application } from 'pixi.js';
+import { Application, Graphics } from 'pixi.js';
 
 import logoUrl from './assets/horse-logo.jpg';
 import { Horse } from './horse';
+import { Barrier } from './barrier';
 
 /**
  * An example element.
@@ -29,11 +30,13 @@ export class PeliAlue extends LitElement {
   näytäPelialue = false;
 
   #horse: Horse;
+  #barrier: Barrier;
   hyppy: undefined | 'ylös' | 'alas' = undefined;
 
   constructor() {
     super();
     this.#horse = new Horse();
+    this.#barrier = new Barrier();
   }
 
   aloitaPeli() {
@@ -57,9 +60,15 @@ export class PeliAlue extends LitElement {
       this.#horse.y = app.screen.height / 2;
       this.#horse.ground = app.screen.height / 2;
 
+      // Add it to the stage to render
+      app.stage.addChild(await this.#barrier.load());
+      this.#barrier.x = 50;
+      this.#barrier.y = app.screen.height / 2 + 150;
+
       // Listen for frame updates
       app.ticker.add(() => {
         this.#horse.update();
+        this.#barrier.update();
       });
     })();
   }
