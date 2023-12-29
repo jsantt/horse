@@ -1,6 +1,6 @@
 import { LitElement, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { Application, Graphics } from 'pixi.js';
+import { Application } from 'pixi.js';
 
 import logoUrl from './assets/horse-logo.jpg';
 import { Horse } from './horse';

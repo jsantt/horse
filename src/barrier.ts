@@ -7,11 +7,8 @@ class Barrier {
 
   #sprite!: Sprite;
 
-  #ground = 0.5;
-
   // force 0 means no force
   #forceX = 0;
-  #forceY = 0;
 
   async load() {
     const texture = await Assets.load(image);
@@ -22,10 +19,6 @@ class Barrier {
     this.sprite.y = this.#currentY;
 
     return this.#sprite;
-  }
-
-  set ground(yValue: number) {
-    this.#ground = yValue;
   }
 
   get sprite() {
@@ -51,9 +44,6 @@ class Barrier {
     this.#sprite.y = value;
   }
 
-  jump() {
-    this.#forceY = -50;
-  }
 
   update() {
     this.x = this.#currentX + 8;
