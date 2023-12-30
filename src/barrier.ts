@@ -2,7 +2,7 @@ import { Assets, Sprite } from 'pixi.js';
 import image from './assets/barrier.png';
 
 class Barrier {
-  #currentX = 300;
+  #currentX = 2000;
   #currentY = 300;
 
   #sprite!: Sprite;
@@ -10,7 +10,8 @@ class Barrier {
   // force 0 means no force
   #forceX = 0;
 
-  async load() {
+  async load(settings: { groundY: number }) {
+    this.#currentY = settings.groundY;
     const texture = await Assets.load(image);
     this.#sprite = new Sprite(texture);
     this.sprite.anchor.set(0.5);
@@ -44,11 +45,10 @@ class Barrier {
     this.#sprite.y = value;
   }
 
-
   update() {
-    this.x = this.#currentX + 8;
-    if (this.x > 1000) {
-      this.x = -300;
+    this.x = this.#currentX - 8;
+    if (this.x < -300) {
+      this.x = 2000;
     }
   }
 }

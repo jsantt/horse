@@ -1,5 +1,5 @@
 import { Assets, Sprite } from 'pixi.js';
-import image from './assets/keppari.jpg';
+import image from './assets/horse.png';
 
 class Horse {
   #currentX = 300;
@@ -7,13 +7,15 @@ class Horse {
 
   #sprite!: Sprite;
 
-  #ground = 0.5;
+  #groundY = 0.5;
 
   // force 0 means no force
   #forceX = 0;
   #forceY = 0;
 
-  async load() {
+  async load(settings: { groundY: number }) {
+    this.#groundY = settings?.groundY;
+
     const texture = await Assets.load(image);
     this.#sprite = new Sprite(texture);
     this.sprite.anchor.set(0.5);
@@ -25,7 +27,7 @@ class Horse {
   }
 
   set ground(yValue: number) {
-    this.#ground = yValue;
+    this.#groundY = yValue;
   }
 
   get sprite() {
@@ -52,15 +54,15 @@ class Horse {
   }
 
   jump() {
-    this.#forceY = -80;
+    this.#forceY = -50;
   }
 
   update() {
     // apply force
     this.y = this.#currentY + this.#forceY * 0.1;
 
-    if (this.#currentY >= this.#ground) {
-      this.#currentY = this.#ground;
+    if (this.#currentY >= this.#groundY) {
+      this.#currentY = this.#groundY;
       this.#forceY = 0;
     } else {
       this.#forceY = this.#forceY + 2;
