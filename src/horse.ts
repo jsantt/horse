@@ -2,7 +2,7 @@ import { Assets, Sprite } from 'pixi.js';
 import image from './assets/horse.png';
 
 class Horse {
-  #currentX = 300;
+  #currentX = 100;
   #currentY = 300;
 
   #sprite!: Sprite;
