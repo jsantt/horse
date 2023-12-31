@@ -67,6 +67,7 @@ class Horse {
     } else {
       this.#forceY = this.#forceY + 2;
     }
+    return { x: this.#currentX, y: this.#currentY, w: 59, h: 38 };
   }
 }
 

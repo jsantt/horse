@@ -1,11 +1,12 @@
 import { LitElement, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { Application } from 'pixi.js';
+import { Application, Graphics } from 'pixi.js';
 
 import logoUrl from './assets/horse-logo.jpg';
 import { Horse } from './horse';
 import { Barrier } from './barrier';
 import { Ground } from './ground';
+import { hasCollided } from './collision-detection';
 
 /**
  * An example element.
@@ -30,8 +31,6 @@ export class PeliAlue extends LitElement {
   @property({ type: Boolean })
   näytäPelialue = false;
 
-  #width?: number;
-  #height?: number;
   #ground: Ground;
   #horse: Horse;
   #barrier: Barrier;
@@ -54,9 +53,6 @@ export class PeliAlue extends LitElement {
         resizeTo: window,
       });
 
-      this.#width = app.screen.width;
-      this.#height = app.screen.height;
-
       // The application will create a canvas element for you that you
       // can then insert into the DOM
       this.renderRoot.querySelector('main')?.appendChild(app.view as any);
@@ -67,8 +63,28 @@ export class PeliAlue extends LitElement {
 
       // Listen for frame updates
       app.ticker.add(() => {
-        this.#horse.update();
-        this.#barrier.update();
+        const barrier = this.#barrier.update();
+        const horse = this.#horse.update();
+
+        const collided = hasCollided(barrier, horse);
+        if (collided) {
+          // Create a Graphics object, set a fill color, draw a rectangle
+          let obj = new Graphics();
+          obj.beginFill(0xff0000);
+          obj.drawRect(horse.x, horse.y + 60, 10, 10);
+
+          // Add it to the stage to render
+          app.stage.addChild(obj);
+          setTimeout(() => {
+            // Create a Graphics object, set a fill color, draw a rectangle
+            let obj = new Graphics();
+            obj.beginFill(0xf6f6f6);
+            obj.drawRect(horse.x, horse.y + 60, 10, 10);
+
+            // Add it to the stage to render
+            app.stage.addChild(obj);
+          }, 2000);
+        }
       });
     })();
   }

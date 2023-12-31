@@ -50,6 +50,7 @@ class Barrier {
     if (this.x < -300) {
       this.x = 2000;
     }
+    return { x: this.#currentX, y: this.#currentY, w: 40, h: 92 };
   }
 }
 
