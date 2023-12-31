@@ -46,9 +46,9 @@ class Barrier {
   }
 
   update() {
-    this.x = this.#currentX - 10;
+    this.x = this.#currentX - 7;
     if (this.x < -300) {
-      this.x = 2000;
+      this.x = 1200;
     }
     return { x: this.#currentX, y: this.#currentY, w: 40, h: 92 };
   }
