@@ -59,17 +59,10 @@ export class PeliAlue extends LitElement {
 
       // The application will create a canvas element for you that you
       // can then insert into the DOM
-      //document.body.appendChild(app.view as any);
       this.renderRoot.querySelector('main')?.appendChild(app.view as any);
 
       app.stage.addChild(this.#ground.load());
       app.stage.addChild(await this.#horse.load({ groundY: this.#ground.y }));
-
-      this.#horse.x = this.#width / 2;
-      this.#horse.y = this.#height / 2;
-      this.#horse.ground = this.#height / 2;
-
-      // Add it to the stage to render
       app.stage.addChild(await this.#barrier.load({ groundY: this.#ground.y }));
 
       // Listen for frame updates
