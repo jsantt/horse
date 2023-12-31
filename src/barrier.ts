@@ -2,7 +2,7 @@ import { Assets, Sprite } from 'pixi.js';
 import image from './assets/barrier.png';
 
 class Barrier {
-  #currentX = 2000;
+  #currentX = 1200;
   #currentY = 300;
 
   #sprite!: Sprite;
@@ -46,7 +46,7 @@ class Barrier {
   }
 
   update() {
-    this.x = this.#currentX - 8;
+    this.x = this.#currentX - 10;
     if (this.x < -300) {
       this.x = 2000;
     }

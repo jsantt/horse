@@ -14,8 +14,8 @@ import { hasCollided } from './collision-detection';
  * @slot - This element has a slot
  * @csspart button - The button
  */
-@customElement('peli-alue')
-export class PeliAlue extends LitElement {
+@customElement('game-area')
+export class GameArea extends LitElement {
   /**
    * Copy for the read the docs hint.
    */
@@ -123,6 +123,6 @@ export class PeliAlue extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'peli-alue': PeliAlue;
+    'peli-alue': GameArea;
   }
 }
