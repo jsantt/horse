@@ -18,7 +18,6 @@ class Horse {
 
     const texture = await Assets.load(image);
     this.#sprite = new Sprite(texture);
-    this.sprite.anchor.set(0.5);
 
     this.sprite.x = this.#currentX;
     this.sprite.y = this.#currentY;
@@ -54,7 +53,7 @@ class Horse {
   }
 
   jump() {
-    this.#forceY = -50;
+    this.#forceY = -55;
   }
 
   update() {

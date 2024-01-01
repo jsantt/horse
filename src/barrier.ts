@@ -1,23 +1,27 @@
 import { Assets, Sprite } from 'pixi.js';
-import image from './assets/barrier.png';
 
 class Barrier {
   #currentX = 1200;
   #currentY = 300;
+
+  #appWidth!: number;
 
   #sprite!: Sprite;
 
   // force 0 means no force
   #forceX = 0;
 
-  async load(settings: { groundY: number }) {
+  async load(settings: { image: string; groundY: number; appWidth: number }) {
     this.#currentY = settings.groundY;
-    const texture = await Assets.load(image);
-    this.#sprite = new Sprite(texture);
-    this.sprite.anchor.set(0.5);
+    this.#currentX = settings.appWidth;
 
-    this.sprite.x = this.#currentX;
-    this.sprite.y = this.#currentY;
+    this.#appWidth = settings.appWidth;
+
+    const texture = await Assets.load(settings.image);
+    this.#sprite = new Sprite(texture);
+
+    this.#sprite.x = this.#currentX;
+    this.#sprite.y = this.#currentY;
 
     return this.#sprite;
   }
@@ -46,11 +50,16 @@ class Barrier {
   }
 
   update() {
-    this.x = this.#currentX - 7;
-    if (this.x < -300) {
-      this.x = 1200;
+    this.x = this.#currentX - 6;
+    if (this.x < -this.#sprite.width) {
+      this.x = this.#appWidth;
     }
-    return { x: this.#currentX, y: this.#currentY, w: 40, h: 92 };
+    return {
+      x: this.#currentX,
+      y: this.#currentY,
+      w: this.#sprite.width,
+      h: this.#sprite.height,
+    };
   }
 }
 

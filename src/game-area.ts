@@ -7,6 +7,8 @@ import { Horse } from './horse';
 import { Barrier } from './barrier';
 import { Ground } from './ground';
 import { hasCollided } from './collision-detection';
+import oxer from './assets/oxer.png';
+import doubleOxer from './assets/double-oxer.png';
 
 /**
  * An example element.
@@ -33,14 +35,17 @@ export class GameArea extends LitElement {
 
   #ground: Ground;
   #horse: Horse;
-  #barrier: Barrier;
+  #oxer: Barrier;
+  #doubleOxer: Barrier;
+
   hyppy: undefined | 'ylös' | 'alas' = undefined;
 
   constructor() {
     super();
     this.#ground = new Ground();
     this.#horse = new Horse();
-    this.#barrier = new Barrier();
+    this.#oxer = new Barrier();
+    this.#doubleOxer = new Barrier();
   }
 
   aloitaPeli() {
@@ -58,17 +63,50 @@ export class GameArea extends LitElement {
       this.renderRoot.querySelector('main')?.appendChild(app.view as any);
 
       app.stage.addChild(this.#ground.load());
-      app.stage.addChild(await this.#horse.load({ groundY: this.#ground.y }));
-      app.stage.addChild(await this.#barrier.load({ groundY: this.#ground.y }));
+      app.stage.addChild(
+        await this.#horse.load({ groundY: this.#ground.y - 10 })
+      );
 
+      const oxerYPosition = this.#ground.y - 30;
+
+      app.stage.addChild(
+        await this.#oxer.load({
+          image: oxer,
+          groundY: oxerYPosition,
+          appWidth: app.screen.width,
+        })
+      );
+      app.stage.addChild(
+        await this.#doubleOxer.load({
+          image: doubleOxer,
+          groundY: oxerYPosition,
+          appWidth: app.screen.width,
+        })
+      );
+
+      let nextBarrier: number = 0;
+
+      let checkCollisions = true;
       // Listen for frame updates
       app.ticker.add(() => {
-        const barrier = this.#barrier.update();
+        let barrier;
+        if (nextBarrier % 2 === 0) {
+          barrier = this.#oxer.update();
+        } else {
+          barrier = this.#doubleOxer.update();
+        }
+
+        if (barrier.x + barrier.w <= 1) {
+          nextBarrier = nextBarrier + 1;
+          console.log(nextBarrier);
+        }
+
         const horse = this.#horse.update();
 
-        const collided = hasCollided(barrier, horse);
-        if (collided) {
+        if (checkCollisions && hasCollided(barrier, horse)) {
+          checkCollisions = false;
           // Create a Graphics object, set a fill color, draw a rectangle
+          // Todo: improve collision graphics and move it elsewhere
           let obj = new Graphics();
           obj.beginFill(0xff0000);
           obj.drawRect(horse.x, horse.y + 60, 10, 10);
@@ -76,14 +114,9 @@ export class GameArea extends LitElement {
           // Add it to the stage to render
           app.stage.addChild(obj);
           setTimeout(() => {
-            // Create a Graphics object, set a fill color, draw a rectangle
-            let obj = new Graphics();
-            obj.beginFill(0xf6f6f6);
-            obj.drawRect(horse.x, horse.y + 60, 10, 10);
-
-            // Add it to the stage to render
-            app.stage.addChild(obj);
-          }, 2000);
+            obj.clear();
+            checkCollisions = true;
+          }, 300);
         }
       });
     })();
