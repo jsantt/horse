@@ -1,6 +1,6 @@
 import { LitElement, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { Application, Graphics } from 'pixi.js';
+import { Application } from 'pixi.js';
 
 import logoUrl from './assets/horse-logo.jpg';
 import { Horse } from './horse';
@@ -91,9 +91,9 @@ export class GameArea extends LitElement {
       app.ticker.add(() => {
         let barrier;
         if (nextBarrier % 2 === 0) {
-          barrier = this.#oxer.update();
+          barrier = this.#oxer.update({ speed: this.#horse.speed });
         } else {
-          barrier = this.#doubleOxer.update();
+          barrier = this.#doubleOxer.update({ speed: this.#horse.speed });
         }
 
         if (barrier.x + barrier.w <= 1) {
@@ -105,27 +105,20 @@ export class GameArea extends LitElement {
 
         if (checkCollisions && hasCollided(barrier, horse)) {
           checkCollisions = false;
-          // Create a Graphics object, set a fill color, draw a rectangle
-          // Todo: improve collision graphics and move it elsewhere
-          let obj = new Graphics();
-          obj.beginFill(0xff0000);
-          obj.drawRect(horse.x, horse.y + 60, 10, 10);
 
-          // Add it to the stage to render
-          app.stage.addChild(obj);
+          this.#horse.speed = 2;
           setTimeout(() => {
-            obj.clear();
             checkCollisions = true;
           }, 300);
         }
       });
     })();
   }
-  #hyppää() {
+  #jump() {
     this.#horse.jump();
   }
 
-  #aloita() {
+  #start() {
     this.näytäPelialue = true;
     setTimeout(() => {
       this.aloitaPeli();
@@ -139,11 +132,11 @@ export class GameArea extends LitElement {
             <header>
               <h1>Tervetuloa horse ten peliin</h1>
             </header>
-            <button @click=${() => this.#aloita()}>aloita</button
+            <button @click=${() => this.#start()}>aloita</button
             ><img src=${logoUrl} />
             <footer>Tekijät: Lotte ja Alisa</footer>
           `
-        : html` <main @click=${() => this.#hyppää()}></main> `}
+        : html` <main @click=${() => this.#jump()}></main> `}
     `;
   }
 

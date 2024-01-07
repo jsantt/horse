@@ -49,8 +49,8 @@ class Barrier {
     this.#sprite.y = value;
   }
 
-  update() {
-    this.x = this.#currentX - 6;
+  update(settings: {speed: number}) {
+    this.x = this.#currentX - settings.speed;
     if (this.x < -this.#sprite.width) {
       this.x = this.#appWidth;
     }

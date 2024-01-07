@@ -2,8 +2,12 @@ import { Assets, Sprite } from 'pixi.js';
 import image from './assets/horse.png';
 
 class Horse {
-  #currentX = 100;
-  #currentY = 300;
+  #x = 100;
+  #y = 300;
+
+  #speed = 1;
+  #maxSpeed = 7;
+  #accelaration = 0.05;
 
   #sprite!: Sprite;
 
@@ -19,8 +23,8 @@ class Horse {
     const texture = await Assets.load(image);
     this.#sprite = new Sprite(texture);
 
-    this.sprite.x = this.#currentX;
-    this.sprite.y = this.#currentY;
+    this.sprite.x = this.#x;
+    this.sprite.y = this.#y;
 
     return this.#sprite;
   }
@@ -34,22 +38,30 @@ class Horse {
   }
 
   get x() {
-    return this.#currentX;
+    return this.#x;
   }
 
   get y() {
     this.#forceX;
-    return this.#currentY;
+    return this.#y;
   }
 
   set x(value) {
-    this.#currentX = value;
+    this.#x = value;
     this.#sprite.x = value;
   }
 
   set y(value) {
-    this.#currentY = value;
+    this.#y = value;
     this.#sprite.y = value;
+  }
+
+  get speed() {
+    return this.#speed;
+  }
+
+  set speed(speed: number) {
+    this.#speed = speed;
   }
 
   jump() {
@@ -57,16 +69,27 @@ class Horse {
   }
 
   update() {
-    // apply force
-    this.y = this.#currentY + this.#forceY * 0.1;
+    this.#handleGravity();
+    this.#accelerate();
 
-    if (this.#currentY >= this.#groundY) {
-      this.#currentY = this.#groundY;
+    return { x: this.#x, y: this.#y, w: 59, h: 38 };
+  }
+
+  #handleGravity() {
+    this.y = this.#y + this.#forceY * 0.1;
+
+    if (this.#y >= this.#groundY) {
+      this.#y = this.#groundY;
       this.#forceY = 0;
     } else {
       this.#forceY = this.#forceY + 2;
     }
-    return { x: this.#currentX, y: this.#currentY, w: 59, h: 38 };
+  }
+
+  #accelerate() {
+    if (this.#speed <= this.#maxSpeed) {
+      this.#speed = this.#speed + this.#accelaration;
+    }
   }
 }
 
