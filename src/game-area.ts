@@ -108,13 +108,7 @@ export class GameArea extends LitElement {
         // HORSE
         const horse = this.#horse.update({ groundY: this.#ground.y });
 
-        // CHECK COLLISIONS
-        if (frameCount % 100 === 0) {
-          console.log('barrier', barrier);
-          console.log('horse', horse);
-        }
         if (checkCollisions && hasCollided(barrier, horse)) {
-          console.log('BANGGGG!!');
           checkCollisions = false;
 
           this.#horse.speed = 2;

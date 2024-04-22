@@ -9,14 +9,12 @@ class Barrier {
   #oxer!: Texture;
   #doubleOxer!: Texture;
 
-  // force 0 means no force
-  #forceX = 0;
-
   async load(settings: { groundY: number; appWidth: number }) {
     this.#oxer = await Assets.load(oxer);
     this.#doubleOxer = await Assets.load(doubleOxer);
 
     this.#sprite = new Sprite(this.#oxer);
+    this.#sprite.anchor.set(0.5);
 
     this.y = settings.groundY;
     this.x = settings.appWidth;

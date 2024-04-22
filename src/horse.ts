@@ -18,6 +18,7 @@ class Horse {
   async load() {
     const texture = await Assets.load(image);
     this.#sprite = new Sprite(texture);
+    this.#sprite.anchor.set(0.5);
 
     this.sprite.x = this.#x;
     this.sprite.y = this.#y;
