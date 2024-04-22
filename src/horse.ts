@@ -1,5 +1,5 @@
 import { Assets, Sprite } from 'pixi.js';
-import image from './assets/horse.png';
+import image from './assets/horse2.jpg';
 
 class Horse {
   #x = 100;
@@ -11,15 +11,11 @@ class Horse {
 
   #sprite!: Sprite;
 
-  #groundY = 0.5;
-
   // force 0 means no force
   #forceX = 0;
   #forceY = 0;
 
-  async load(settings: { groundY: number }) {
-    this.#groundY = settings?.groundY;
-
+  async load() {
     const texture = await Assets.load(image);
     this.#sprite = new Sprite(texture);
 
@@ -27,10 +23,6 @@ class Horse {
     this.sprite.y = this.#y;
 
     return this.#sprite;
-  }
-
-  set ground(yValue: number) {
-    this.#groundY = yValue;
   }
 
   get sprite() {
@@ -68,18 +60,18 @@ class Horse {
     this.#forceY = -55;
   }
 
-  update() {
-    this.#handleGravity();
+  update(params: { groundY: number }) {
+    this.#handleGravity(params);
     this.#accelerate();
 
     return { x: this.#x, y: this.#y, w: 59, h: 38 };
   }
 
-  #handleGravity() {
+  #handleGravity(params: { groundY: number }) {
     this.y = this.#y + this.#forceY * 0.1;
 
-    if (this.#y >= this.#groundY) {
-      this.#y = this.#groundY;
+    if (this.#y >= params.groundY) {
+      this.#y = params.groundY;
       this.#forceY = 0;
     } else {
       this.#forceY = this.#forceY + 2;

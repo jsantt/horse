@@ -1,27 +1,28 @@
-import { Assets, Sprite } from 'pixi.js';
+import { Assets, Sprite, Texture } from 'pixi.js';
+
+import oxer from './assets/oxer.png';
+import doubleOxer from './assets/double-oxer.png';
 
 class Barrier {
-  #currentX = 1200;
-  #currentY = 300;
-
-  #appWidth!: number;
-
   #sprite!: Sprite;
+
+  #oxer!: Texture;
+  #doubleOxer!: Texture;
 
   // force 0 means no force
   #forceX = 0;
 
-  async load(settings: { image: string; groundY: number; appWidth: number }) {
-    this.#currentY = settings.groundY;
-    this.#currentX = settings.appWidth;
+  async load(settings: { groundY: number; appWidth: number }) {
+    this.#oxer = await Assets.load(oxer);
+    this.#doubleOxer = await Assets.load(doubleOxer);
 
-    this.#appWidth = settings.appWidth;
+    this.#sprite = new Sprite(this.#oxer);
 
-    const texture = await Assets.load(settings.image);
-    this.#sprite = new Sprite(texture);
+    this.y = settings.groundY;
+    this.x = settings.appWidth;
 
-    this.#sprite.x = this.#currentX;
-    this.#sprite.y = this.#currentY;
+    this.#sprite.x = this.x;
+    this.#sprite.y = this.y;
 
     return this.#sprite;
   }
@@ -31,35 +32,46 @@ class Barrier {
   }
 
   get x() {
-    return this.#currentX;
+    return this.#sprite.x;
   }
 
   get y() {
-    this.#forceX;
-    return this.#currentY;
+    return this.#sprite.y;
   }
 
   set x(value) {
-    this.#currentX = value;
     this.#sprite.x = value;
   }
 
   set y(value) {
-    this.#currentY = value;
     this.#sprite.y = value;
   }
 
-  update(settings: {speed: number}) {
-    this.x = this.#currentX - settings.speed;
+  update(params: { appWidth: number; speed: number }) {
+    if (this.x >= params.appWidth) {
+      this.#sprite.texture = this.#getBarrier();
+    }
+
+    this.x = this.x - params.speed;
     if (this.x < -this.#sprite.width) {
-      this.x = this.#appWidth;
+      this.x = params.appWidth;
     }
     return {
-      x: this.#currentX,
-      y: this.#currentY,
+      x: this.x,
+      y: this.y,
       w: this.#sprite.width,
       h: this.#sprite.height,
     };
+  }
+
+  #getBarrier(): Texture {
+    const random = Math.random();
+
+    if (random < 0.5) {
+      return this.#oxer;
+    } else {
+      return this.#doubleOxer;
+    }
   }
 }
 
