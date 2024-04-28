@@ -1,56 +1,64 @@
 import { Graphics } from 'pixi.js';
 
-type Coordinates = { x: number; y: number };
+type Level = { x: number; y: number; length: number };
 
 class Ground {
-  #graphics!: Graphics;
-  #groundPoints!: Array<Coordinates>;
+  #groundGraphics!: Graphics;
+
+  #level!: Level;
 
   #updateCount: number = 0;
 
   get y() {
-    return this.#graphics.y;
+    return this.#groundGraphics.y;
   }
 
   set y(y: number) {
-    this.#graphics.y = y;
+    this.#groundGraphics.y = y;
   }
 
   get x() {
-    return this.#graphics.x;
+    return this.#groundGraphics.x;
   }
 
   set x(x: number) {
-    this.#graphics.x = x;
+    this.#groundGraphics.x = x;
   }
 
   load(params: { appWidth: number; y: number }) {
-    this.#graphics = new Graphics();
+    this.initLevels(params);
+
+    this.#groundGraphics = new Graphics();
+
+    this.#groundGraphics.beginFill(0xcccccc);
+    this.#groundGraphics.drawRect(0, 0, params.appWidth * 4, 3);
+
+    this.drawLevels(params);
+
     this.x = 0;
     this.y = params.y;
-    console.log('ground', this.y);
 
-    this.#graphics.beginFill(0xcccccc);
+    return this.#groundGraphics;
+  }
 
-    this.#graphics.drawRect(0, 0, params.appWidth, 7);
-    console.log(
-      'draw rect (x, y, width, height)',
-      this.x,
-      this.y,
+  private initLevels(params: { appWidth: number; y: number; }) {
+    this.#level = { x: params.appWidth + 100, y: -70, length: params.appWidth };
+  }
+
+  drawLevels(params: { appWidth: number; y: number }) {
+    this.#groundGraphics.drawRect(
+      this.#level.x,
+      this.#level.y,
       params.appWidth,
-      7
+      3
     );
-
-    this.#graphics.position.set(this.x, this.y);
-
-    return this.#graphics;
   }
 
   update(settings: { speed: number; appWidth: number }) {
-    //this.x = this.x - settings.speed;
+    this.x = this.x - settings.speed;
 
-    if (this.#updateCount % 100 === 0) {
-      // this.y = this.y - 10;
+    if (this.x < -settings.appWidth * 3) {
+      this.x = 0;
     }
 
     this.#updateCount++;

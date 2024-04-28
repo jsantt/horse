@@ -8,6 +8,7 @@ class Horse {
   #speed = 1;
   #maxSpeed = 7;
   #accelaration = 0.05;
+  #jumpForce = 65;
 
   #sprite!: Sprite;
 
@@ -58,7 +59,7 @@ class Horse {
   }
 
   jump() {
-    this.#forceY = -55;
+    this.#forceY = -this.#jumpForce;
   }
 
   update(params: { groundY: number }) {
