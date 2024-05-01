@@ -7,8 +7,6 @@ class Ground {
 
   #level!: Level;
 
-  #updateCount: number = 0;
-
   get y() {
     return this.#groundGraphics.y;
   }
@@ -26,9 +24,12 @@ class Ground {
   }
 
   load(params: { appWidth: number; y: number }) {
-    this.initLevels(params);
+    this.#level = this.getInitLevels(params);
 
     this.#groundGraphics = new Graphics();
+
+    this.#groundGraphics.beginFill(0xcccccc);
+    this.#groundGraphics.drawRect(0, 0, 50, 50);
 
     this.#groundGraphics.beginFill(0xcccccc);
     this.#groundGraphics.drawRect(0, 0, params.appWidth * 4, 3);
@@ -41,8 +42,8 @@ class Ground {
     return this.#groundGraphics;
   }
 
-  private initLevels(params: { appWidth: number; y: number; }) {
-    this.#level = { x: params.appWidth + 100, y: -70, length: params.appWidth };
+  private getInitLevels(params: { appWidth: number; y: number }) {
+    return { x: params.appWidth + 100, y: -70, length: params.appWidth };
   }
 
   drawLevels(params: { appWidth: number; y: number }) {
@@ -54,14 +55,29 @@ class Ground {
     );
   }
 
-  update(settings: { speed: number; appWidth: number }) {
-    this.x = this.x - settings.speed;
+  update(params: { horseSpeed: number; horseX: number; appWidth: number }) {
+    let currentGround;
 
-    if (this.x < -settings.appWidth * 3) {
+    // move grounds backwards
+    this.x = this.x - params.horseSpeed;
+
+    // loop back to start when drawn grounds end
+    if (this.x < -params.appWidth * 3) {
       this.x = 0;
     }
 
-    this.#updateCount++;
+    // return grounds, which are under the horse
+    console.log('x ja level x', this.x, this.#level.x);
+
+    if (
+      -this.x + params.horseX > this.#level.x &&
+      -this.x + params.horseX < this.#level.x + this.#level.length
+    ) {
+      currentGround = { ground: this.y, ground2: this.y - 70 };
+    } else {
+      currentGround = { ground: this.y };
+    }
+    return currentGround;
   }
 }
 

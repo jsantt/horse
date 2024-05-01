@@ -7,6 +7,7 @@ import { Horse } from './horse';
 import { Barrier } from './barrier';
 import { Ground } from './ground';
 import { hasCollided } from './collision-detection';
+import { DebugGrid } from './debug-grid.ts';
 
 /**
  * An example element.
@@ -35,11 +36,15 @@ export class GameArea extends LitElement {
   #horse: Horse;
   #barrier: Barrier;
 
+  #debugGrid: DebugGrid;
+
   constructor() {
     super();
     this.#ground = new Ground();
     this.#horse = new Horse();
     this.#barrier = new Barrier();
+
+    this.#debugGrid = new DebugGrid();
   }
 
   async #initGame(): Promise<Application> {
@@ -71,6 +76,8 @@ export class GameArea extends LitElement {
       })
     );
 
+    app.stage.addChild(this.#debugGrid.load());
+
     return app;
   }
 
@@ -92,21 +99,25 @@ export class GameArea extends LitElement {
       app.ticker.add(() => {
         frameCount++;
 
-        // BARRIER
+        // barrier
         let barrier;
         barrier = this.#barrier.update({
           appWidth: app.screen.width,
           speed: this.#horse.speed,
         });
 
-        // GROUND
-        this.#ground.update({
-          speed: this.#horse.speed,
+        // ground
+        const ground = this.#ground.update({
+          horseSpeed: this.#horse.speed,
+          horseX: this.#horse.x,
           appWidth: app.screen.width,
         });
 
-        // HORSE
-        const horse = this.#horse.update({ groundY: this.#ground.y });
+        // horse
+        const horse = this.#horse.update({
+          ground: ground.ground,
+          ground2: ground.ground2,
+        });
 
         if (checkCollisions && hasCollided(barrier, horse)) {
           checkCollisions = false;

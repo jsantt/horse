@@ -62,19 +62,21 @@ class Horse {
     this.#forceY = -this.#jumpForce;
   }
 
-  update(params: { groundY: number }) {
+  update(params: { ground: number; ground2?: number }) {
     this.#handleGravity(params);
     this.#accelerate();
 
     return { x: this.#x, y: this.#y, w: 59, h: 38 };
   }
 
-  #handleGravity(params: { groundY: number }) {
+  #handleGravity(params: { ground: number; ground2?: number }) {
     this.y = this.#y + this.#forceY * 0.1;
 
-    if (this.#y >= params.groundY) {
-      this.#y = params.groundY;
+    if (this.#y >= params.ground) {
+      this.#y = params.ground;
       this.#forceY = 0;
+    } else if (params.ground2 && this.#y >= params.ground2) {
+      this.#y = params.ground2;
     } else {
       this.#forceY = this.#forceY + 2;
     }
