@@ -46,13 +46,14 @@ class Barrier {
   }
 
   update(params: { appWidth: number; speed: number }) {
+    // new random barrier
     if (this.x >= params.appWidth) {
       this.#sprite.texture = this.#getBarrier();
     }
 
     this.x = this.x - params.speed;
     if (this.x < -this.#sprite.width) {
-      this.x = params.appWidth;
+      this.x = this.#getNextBarrierX(params.appWidth);
     }
     return {
       x: this.x,
@@ -60,6 +61,12 @@ class Barrier {
       w: this.#sprite.width,
       h: this.#sprite.height,
     };
+  }
+
+  #getNextBarrierX(appWidth: number) {
+    const random = Math.random() * 900;
+
+    return appWidth + random;
   }
 
   #getBarrier(): Texture {

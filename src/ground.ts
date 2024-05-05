@@ -29,12 +29,9 @@ class Ground {
     this.#groundGraphics = new Graphics();
 
     this.#groundGraphics.beginFill(0xcccccc);
-    this.#groundGraphics.drawRect(0, 0, 50, 50);
+    this.#groundGraphics.drawRect(0, 0, params.appWidth * 6, 3);
 
-    this.#groundGraphics.beginFill(0xcccccc);
-    this.#groundGraphics.drawRect(0, 0, params.appWidth * 4, 3);
-
-    this.drawLevels(params);
+    this.drawLevels();
 
     this.x = 0;
     this.y = params.y;
@@ -43,14 +40,18 @@ class Ground {
   }
 
   private getInitLevels(params: { appWidth: number; y: number }) {
-    return { x: params.appWidth + 100, y: -70, length: params.appWidth };
+    return {
+      x: params.appWidth + 100,
+      y: -70,
+      length: params.appWidth + Math.random() * 1000,
+    };
   }
 
-  drawLevels(params: { appWidth: number; y: number }) {
+  drawLevels() {
     this.#groundGraphics.drawRect(
       this.#level.x,
       this.#level.y,
-      params.appWidth,
+      this.#level.length,
       3
     );
   }

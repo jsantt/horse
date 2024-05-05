@@ -7,7 +7,7 @@ class Horse {
 
   #speed = 1;
   #maxSpeed = 7;
-  #accelaration = 0.02;
+  #accelaration = 0.1;
   #jumpForce = 40;
   #gravity = 0.3;
 
