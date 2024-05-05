@@ -2,13 +2,14 @@ import { Assets, Sprite } from 'pixi.js';
 import image from './assets/horse2.jpg';
 
 class Horse {
-  #x = 100;
+  #x = 40;
   #y = 300;
 
   #speed = 1;
   #maxSpeed = 7;
-  #accelaration = 0.05;
-  #jumpForce = 65;
+  #accelaration = 0.02;
+  #jumpForce = 40;
+  #gravity = 0.3;
 
   #sprite!: Sprite;
 
@@ -70,7 +71,7 @@ class Horse {
   }
 
   #handleGravity(params: { ground: number; ground2?: number }) {
-    this.y = this.#y + this.#forceY * 0.1;
+    this.y = this.#y + this.#forceY * this.#gravity;
 
     if (this.#y >= params.ground) {
       this.#y = params.ground;
